@@ -1,0 +1,33 @@
+buildscript {
+  repositories {
+    maven { url "http://oss.jfrog.org/artifactory/repo" }
+    jcenter()
+  }
+  dependencies {
+    classpath 'io.ratpack:ratpack-gradle:0.9.0'
+  }
+}
+
+apply plugin: "ratpack-groovy"
+apply plugin: "idea"
+
+repositories {
+  maven { url "http://oss.jfrog.org/artifactory/repo" }
+  jcenter()
+  maven { url "http://repo.springsource.org/repo" }
+}
+
+dependencies {
+  springloaded "org.springsource.springloaded:springloaded-core:1.1.4"
+  compile "io.ratpack:ratpack-jackson:0.9.0"
+  testCompile "org.spockframework:spock-core:0.7-groovy-2.0", {
+      exclude module: "groovy-all"
+  }
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '1.10'
+}
+
+// Suppress testing warnings, caused by rest-assured Groovy dependency
+configurations.testCompile.dependencies.find { it.name == "ratpack-groovy-test" }.exclude(group: "org.codehaus.groovy")
