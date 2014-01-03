@@ -19,7 +19,7 @@ ratpack {
     }
 
     get("json") {
-      render json( [(Helper.MESSAGE_KEY): Helper.MESSAGE_VALUE] )
+      render json( (Helper.MESSAGE_KEY): Helper.MESSAGE_VALUE )
     }
 
     get("plaintext") {
