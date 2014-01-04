@@ -1,5 +1,5 @@
 {
-  "framework": "ratpack-groovy",
+  "framework": "ratpack",
   "tests": [{
     "default": {
       "setup_file": "setup",
@@ -17,25 +17,6 @@
       "os": "Linux",
       "database_os": "Linux",
       "display_name": "ratpack-groovy",
-      "notes": "",
-      "versus": "netty"
-    },
-    "default-windows": {
-      "setup_file": "setup",
-      "json_url": "/json",
-      "plaintext_url": "/plaintext",
-      "port": 5050,
-      "approach": "Realistic",
-      "classification": "Micro",
-      "database": "None",
-      "framework": "ratpack",
-      "language": "Groovy",
-      "orm": "Raw",
-      "platform": "Netty",
-      "webserver": "None",
-      "os": "Windows",
-      "database_os": "Linux",
-      "display_name": "ratpack-groovy-windows",
       "notes": "",
       "versus": "netty"
     }
