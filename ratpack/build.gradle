@@ -9,7 +9,7 @@ buildscript {
 }
 
 apply plugin: "ratpack-groovy"
-apply plugin: "idea"
+apply from: "gradle/idea/idea.gradle"
 
 repositories {
   maven { url "http://oss.jfrog.org/artifactory/repo" }
