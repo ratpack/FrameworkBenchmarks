@@ -1,3 +1,5 @@
+import io.ratpack.gradle.RunInBackground
+
 buildscript {
   repositories {
     maven { url "http://oss.jfrog.org/artifactory/repo" }
@@ -27,6 +29,14 @@ dependencies {
 
 task wrapper(type: Wrapper) {
   gradleVersion = '1.10'
+}
+
+task runInBackground(type: RunInBackground) {
+  dependsOn installApp
+
+  directory installApp.outputs.files.singleFile
+  command "bin/${project.name}"
+  readyText 'Ratpack started'
 }
 
 // Suppress testing warnings, caused by rest-assured Groovy dependency
