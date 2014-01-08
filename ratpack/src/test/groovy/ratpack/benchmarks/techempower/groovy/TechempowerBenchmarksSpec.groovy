@@ -1,5 +1,6 @@
 package ratpack.benchmarks.techempower.groovy
 
+import com.jayway.restassured.response.Response
 import io.netty.handler.codec.http.HttpHeaders
 import ratpack.groovy.test.LocalScriptApplicationUnderTest
 import ratpack.groovy.test.TestHttpClient
@@ -22,8 +23,11 @@ class TechempowerBenchmarksSpec extends Specification {
 
     then:
     def responseStr = response.asString()
-    responseStr == "{\"${Helper.MESSAGE_KEY}\":\"${Helper.MESSAGE_VALUE}\"}"
-    assertResponseHeaders(response, 'application/json', responseStr.getBytes().length)
+    responseStr == """{"${Helper.MESSAGE_KEY}":"${Helper.MESSAGE_VALUE}"}"""
+    assertResponseHeaders(response, 'application/json', responseStr, testStartDate)
+
+    where:
+    testStartDate = new Date()
   }
 
   def "plaintext test type fulfills requirements"() {
@@ -33,15 +37,18 @@ class TechempowerBenchmarksSpec extends Specification {
     then:
     def responseStr = response.asString()
     responseStr == Helper.MESSAGE_VALUE
-    assertResponseHeaders(response, 'text/plain;charset=UTF-8', responseStr.getBytes().length)
+    assertResponseHeaders(response, 'text/plain;charset=UTF-8', responseStr, testStartDate)
+
+    where:
+    testStartDate = new Date()
   }
 
-  void assertResponseHeaders(response, expectedContentType, expectedContentLength) {
+  void assertResponseHeaders(Response response, String expectedContentType, String responseText, Date testStartTime) {
     assert response.contentType == expectedContentType
-    assert response.header(HttpHeaders.Names.CONTENT_LENGTH) == expectedContentLength.toString()
+    assert response.header(HttpHeaders.Names.CONTENT_LENGTH) == responseText.getBytes().length.toString()
     assert response.header(HttpHeaders.Names.SERVER) == Helper.SERVER_NAME
-    def headerDate = new SimpleDateFormat(Helper.DATE_FORMAT, Locale.UK).parse( response.header(HttpHeaders.Names.DATE) )
-    def now = new Date()
-    assert now.time - headerDate.time < 2000
+    def headerDate = new SimpleDateFormat(Helper.DATE_FORMAT, Locale.UK).parse(response.header(HttpHeaders.Names.DATE))
+    assert testStartTime.time.intdiv(1000) <= headerDate.time.intdiv(1000)
+    assert headerDate <= new Date()
   }
 }
