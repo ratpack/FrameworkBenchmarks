@@ -1,1 +1,5 @@
 apply from: "gradle/idea/idea.gradle"
+
+allprojects {
+  apply plugin: 'idea'
+}
