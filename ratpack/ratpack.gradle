@@ -1,0 +1,1 @@
+apply from: "gradle/idea/idea.gradle"
