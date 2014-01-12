@@ -4,11 +4,8 @@ import os
 import setup_util
 
 def start(args, logfile, errfile):
-  # TODO
-  # setup_util.replace_text("ratpack/src/ratpack/DataSource.groovy", "localhost", args.database_host)
-  
   try:
-    subprocess.check_call("./gradlew clean runInBackground", shell=True, cwd="ratpack", stderr=errfile, stdout=logfile)
+    subprocess.check_call("./gradlew clean ratpack-groovy:runInBackground", shell=True, cwd="ratpack", stderr=errfile, stdout=logfile)
     return 0
   except subprocess.CalledProcessError:
     return 1

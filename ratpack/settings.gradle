@@ -1,4 +1,4 @@
-include 'ratpack-groovy'
+include 'ratpack-groovy', 'ratpack-java'
 
 rootProject.name = 'ratpack'
 
