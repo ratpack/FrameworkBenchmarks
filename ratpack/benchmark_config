@@ -1,8 +1,8 @@
 {
   "framework": "ratpack",
   "tests": [{
-    "default": {
-      "setup_file": "setup",
+    "groovy": {
+      "setup_file": "setup_groovy",
       "json_url": "/json",
       "plaintext_url": "/plaintext",
       "port": 5050,
@@ -17,6 +17,25 @@
       "os": "Linux",
       "database_os": "Linux",
       "display_name": "ratpack-groovy",
+      "notes": "",
+      "versus": "netty"
+    },
+    "java": {
+      "setup_file": "setup_java",
+      "json_url": "/json",
+      "plaintext_url": "/plaintext",
+      "port": 5050,
+      "approach": "Realistic",
+      "classification": "Micro",
+      "database": "None",
+      "framework": "ratpack",
+      "language": "Groovy",
+      "orm": "Raw",
+      "platform": "Netty",
+      "webserver": "None",
+      "os": "Linux",
+      "database_os": "Linux",
+      "display_name": "ratpack-java",
       "notes": "",
       "versus": "netty"
     }

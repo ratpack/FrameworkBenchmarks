@@ -1,5 +1,43 @@
+import io.ratpack.gradle.RunInBackground
+
 apply from: "gradle/idea/idea.gradle"
+
+buildscript {
+  repositories {
+    maven { url "http://oss.jfrog.org/artifactory/repo" }
+    jcenter()
+  }
+  dependencies {
+    classpath 'io.ratpack:ratpack-gradle:0.9.0'
+  }
+}
 
 allprojects {
   apply plugin: 'idea'
+}
+
+subprojects {
+  apply plugin: "ratpack"
+
+  repositories {
+    maven { url "http://oss.jfrog.org/artifactory/repo" }
+    jcenter()
+    maven { url "http://repo.springsource.org/repo" }
+  }
+
+  dependencies {
+    springloaded "org.springsource.springloaded:springloaded-core:1.1.4"
+    compile "io.ratpack:ratpack-jackson:0.9.0"
+    testCompile "org.spockframework:spock-core:0.7-groovy-2.0", {
+      exclude module: "groovy-all"
+    }
+  }
+
+  task runInBackground(type: RunInBackground) {
+    dependsOn installApp
+
+    directory installApp.outputs.files.singleFile
+    command "bin/${project.name}"
+    readyText 'Ratpack started'
+  }
 }
