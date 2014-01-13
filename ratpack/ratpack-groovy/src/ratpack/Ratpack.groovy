@@ -1,5 +1,5 @@
 import io.netty.handler.codec.http.HttpHeaders
-import ratpack.benchmarks.techempower.groovy.Helper
+import ratpack.benchmarks.techempower.common.ResponseData
 import ratpack.jackson.JacksonModule
 
 import static ratpack.groovy.Groovy.ratpack
@@ -14,17 +14,17 @@ ratpack {
   handlers {
     handler {
       response.headers.set(HttpHeaders.Names.DATE, new Date())
-      response.headers.set(HttpHeaders.Names.SERVER, Helper.SERVER_NAME)
+      response.headers.set(HttpHeaders.Names.SERVER, ResponseData.SERVER_NAME)
       next()
     }
 
     get("json") {
-      render json((Helper.MESSAGE_KEY): Helper.MESSAGE_VALUE)
+      render json((ResponseData.MESSAGE_KEY): ResponseData.MESSAGE_VALUE)
     }
 
     get("plaintext") {
       // using response.send() directly, by-passing any render() overhead
-      response.send Helper.MESSAGE_VALUE
+      response.send ResponseData.MESSAGE_VALUE
     }
   }
 
