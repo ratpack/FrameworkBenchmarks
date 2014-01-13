@@ -8,12 +8,14 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'io.ratpack:ratpack-gradle:0.9.0'
+    classpath 'io.ratpack:ratpack-gradle:0.9.1-SNAPSHOT'
   }
 }
 
 allprojects {
   apply plugin: 'idea'
+
+  apply from: rootProject.file("gradle/dependencies.gradle")
 }
 
 subprojects {
@@ -25,19 +27,21 @@ subprojects {
     maven { url "http://repo.springsource.org/repo" }
   }
 
-  dependencies {
-    springloaded "org.springsource.springloaded:springloaded-core:1.1.4"
-    compile "io.ratpack:ratpack-jackson:0.9.0"
-    testCompile "org.spockframework:spock-core:0.7-groovy-2.0", {
-      exclude module: "groovy-all"
+  if (name in ['ratpack-java', 'ratpack-groovy']) {
+    dependencies {
+      springloaded "org.springsource.springloaded:springloaded-core:1.1.4"
+      compile "io.ratpack:ratpack-jackson:${versions.ratpack}",
+        project(':common')
+      testCompile libraries.spock,
+        project(':common-test')
     }
-  }
 
-  task runInBackground(type: RunInBackground) {
-    dependsOn installApp
+    task runInBackground(type: RunInBackground) {
+      dependsOn installApp
 
-    directory installApp.outputs.files.singleFile
-    command "bin/${project.name}"
-    readyText 'Ratpack started'
+      directory installApp.outputs.files.singleFile
+      command "bin/${project.name}"
+      readyText 'Ratpack started'
+    }
   }
 }

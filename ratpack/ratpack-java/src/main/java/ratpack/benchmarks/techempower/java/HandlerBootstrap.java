@@ -1,6 +1,7 @@
 package ratpack.benchmarks.techempower.java;
 
 import io.netty.handler.codec.http.HttpHeaders;
+import ratpack.benchmarks.techempower.common.ResponseData;
 import ratpack.handling.Chain;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;

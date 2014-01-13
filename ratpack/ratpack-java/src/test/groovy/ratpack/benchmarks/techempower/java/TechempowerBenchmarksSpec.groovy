@@ -1,11 +1,11 @@
-package ratpack.benchmarks.techempower.groovy
+package ratpack.benchmarks.techempower.java
 
-import ratpack.groovy.test.LocalScriptApplicationUnderTest
+import ratpack.test.RatpackMainApplicationUnderTest
 import ratpack.test.ServerBackedApplicationUnderTest
 
 class TechempowerBenchmarksSpec extends ratpack.benchmarks.techempower.test.TechempowerBenchmarkSpec {
 
   ServerBackedApplicationUnderTest createApplicationUnderTest() {
-    new LocalScriptApplicationUnderTest()
+    new RatpackMainApplicationUnderTest()
   }
 }

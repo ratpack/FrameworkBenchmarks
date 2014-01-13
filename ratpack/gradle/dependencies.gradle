@@ -1,0 +1,11 @@
+ext {
+  versions = [
+    ratpack: '0.9.1-SNAPSHOT'
+  ]
+
+  libraries = [
+    spock: dependencies.create("org.spockframework:spock-core:0.7-groovy-2.0") {
+      exclude module: "groovy-all"
+    }
+  ]
+}
