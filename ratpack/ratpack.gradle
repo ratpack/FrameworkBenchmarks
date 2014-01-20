@@ -22,9 +22,14 @@ subprojects {
   apply plugin: "ratpack"
 
   repositories {
+    mavenLocal()
     maven { url "http://oss.jfrog.org/artifactory/repo" }
     jcenter()
     maven { url "http://repo.springsource.org/repo" }
+  }
+
+  configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
   }
 
   if (name in ['ratpack-java', 'ratpack-groovy']) {
