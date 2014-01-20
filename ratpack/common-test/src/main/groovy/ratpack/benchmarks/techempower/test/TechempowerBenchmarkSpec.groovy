@@ -49,7 +49,7 @@ abstract class TechempowerBenchmarkSpec extends Specification {
   void assertResponseHeaders(Response response, String expectedContentType, String responseText, Date testStartTime) {
     assert response.contentType == expectedContentType
     assert response.header(HttpHeaders.Names.CONTENT_LENGTH) == responseText.getBytes().length.toString()
-    assert response.header(HttpHeaders.Names.SERVER) == ResponseData.SERVER_NAME
+    assert response.header(HttpHeaders.Names.SERVER) == ResponseData.SERVER_NAME.toString()
     def headerDate = new SimpleDateFormat(DATE_FORMAT).parse(response.header(HttpHeaders.Names.DATE))
     assert testStartTime.time.intdiv(1000) <= headerDate.time.intdiv(1000)
     assert headerDate <= new Date()

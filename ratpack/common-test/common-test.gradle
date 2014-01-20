@@ -2,6 +2,9 @@ apply plugin: 'groovy'
 
 dependencies {
   compile project(':common'),
-    libraries.spock,
-    "io.ratpack:ratpack-groovy-test:${versions.ratpack}"
+    libraries.spock
+  compile "io.ratpack:ratpack-groovy-test:${versions.ratpack}", {
+    exclude group: "org.codehaus.groovy"
+  }
+  compile "org.codehaus.groovy:groovy-all:2.2.1"
 }
