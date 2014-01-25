@@ -1,1 +1,6 @@
 apply plugin: 'java'
+
+dependencies {
+  compile "io.ratpack:ratpack-guice:${versions.ratpack}"
+  compile 'com.zaxxer:HikariCP:1.2.8'
+}

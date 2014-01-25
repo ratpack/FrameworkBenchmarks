@@ -37,6 +37,7 @@ subprojects {
       springloaded "org.springsource.springloaded:springloaded-core:1.1.4"
       compile "io.ratpack:ratpack-jackson:${versions.ratpack}",
         project(':common')
+      runtime 'mysql:mysql-connector-java:5.1.28'
       testCompile libraries.spock,
         project(':common-test')
     }
