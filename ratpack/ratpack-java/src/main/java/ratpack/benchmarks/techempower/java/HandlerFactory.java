@@ -7,6 +7,7 @@ import ratpack.handling.Handler;
 import ratpack.http.MutableHeaders;
 import ratpack.http.Response;
 import ratpack.launch.LaunchConfig;
+import ratpack.launch.internal.DefaultLaunchConfig;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -22,8 +23,7 @@ public class HandlerFactory implements ratpack.launch.HandlerFactory {
   private CharSequence date = HttpHeaders.newEntity(format.format(new Date()));
 
   public Handler create(LaunchConfig launchConfig) throws Exception {
-
-    launchConfig.getEventLoopGroup().scheduleWithFixedDelay(new Runnable() {
+    ((DefaultLaunchConfig) launchConfig).getEventLoopGroup().scheduleWithFixedDelay(new Runnable() {
       @Override
       public void run() {
         date = HttpHeaders.newEntity(format.format(new Date()));
