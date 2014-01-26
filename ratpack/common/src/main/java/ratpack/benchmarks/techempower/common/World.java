@@ -20,7 +20,7 @@ public class World {
     return randomNumber;
   }
 
-  static int randomId() {
+  public static int randomId() {
     // World ids range from 1 to 10000
     return 1 + ThreadLocalRandom.current().nextInt(10000);
   }
