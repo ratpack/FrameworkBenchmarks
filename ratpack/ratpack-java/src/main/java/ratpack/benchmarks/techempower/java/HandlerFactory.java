@@ -7,7 +7,6 @@ import ratpack.handling.Handler;
 import ratpack.http.MutableHeaders;
 import ratpack.http.Response;
 import ratpack.launch.LaunchConfig;
-import ratpack.launch.internal.DefaultLaunchConfig;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;

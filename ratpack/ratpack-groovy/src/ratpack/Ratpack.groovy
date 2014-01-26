@@ -1,11 +1,11 @@
 import io.netty.handler.codec.http.HttpHeaders
 import ratpack.benchmarks.techempower.common.HikariCPModule
-import ratpack.benchmarks.techempower.common.ResponseData
 import ratpack.benchmarks.techempower.groovy.DataAccessModule
 import ratpack.benchmarks.techempower.groovy.WorldService
 import ratpack.groovy.sql.SqlModule
 import ratpack.jackson.JacksonModule
 
+import static ratpack.benchmarks.techempower.common.ResponseData.*
 import static ratpack.groovy.Groovy.ratpack
 import static ratpack.jackson.Jackson.json
 
@@ -21,13 +21,13 @@ ratpack {
   handlers {
     handler {
       response.headers.set(HttpHeaders.Names.DATE, new Date())
-      response.headers.set(HttpHeaders.Names.SERVER, ResponseData.SERVER_NAME)
+      response.headers.set(HttpHeaders.Names.SERVER, SERVER_NAME)
       next()
     }
 
     // Test type 1: JSON serialization
     get("json") {
-      render json((ResponseData.MESSAGE_KEY): ResponseData.MESSAGE_VALUE)
+      render json((MESSAGE_KEY): MESSAGE_VALUE)
     }
 
     // Test type 2: Single database query
@@ -42,7 +42,7 @@ ratpack {
     // Test type 6: Plaintext
     get("plaintext") {
       // using response.send() directly, by-passing any render() overhead
-      response.send ResponseData.MESSAGE_VALUE
+      response.send MESSAGE_VALUE
     }
   }
 

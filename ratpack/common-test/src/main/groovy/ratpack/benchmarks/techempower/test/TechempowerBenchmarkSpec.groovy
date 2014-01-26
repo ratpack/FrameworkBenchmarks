@@ -2,7 +2,6 @@ package ratpack.benchmarks.techempower.test
 
 import com.jayway.restassured.response.Response
 import io.netty.handler.codec.http.HttpHeaders
-import ratpack.benchmarks.techempower.common.ResponseData
 import ratpack.groovy.test.TestHttpClient
 import ratpack.groovy.test.TestHttpClients
 import ratpack.test.ServerBackedApplicationUnderTest
@@ -10,6 +9,8 @@ import spock.lang.AutoCleanup
 import spock.lang.Specification
 
 import java.text.SimpleDateFormat
+
+import static ratpack.benchmarks.techempower.common.ResponseData.*
 
 abstract class TechempowerBenchmarkSpec extends Specification {
 
@@ -26,7 +27,7 @@ abstract class TechempowerBenchmarkSpec extends Specification {
 
     then:
     def responseStr = response.asString()
-    responseStr == """{"${ResponseData.MESSAGE_KEY}":"${ResponseData.MESSAGE_VALUE}"}"""
+    responseStr == """{"${MESSAGE_KEY}":"${MESSAGE_VALUE}"}"""
     assertResponseHeaders(response, 'application/json', responseStr, testStartDate)
 
     where:
@@ -39,7 +40,7 @@ abstract class TechempowerBenchmarkSpec extends Specification {
 
     then:
     def responseStr = response.asString()
-    responseStr == ResponseData.MESSAGE_VALUE
+    responseStr == MESSAGE_VALUE
     assertResponseHeaders(response, 'text/plain;charset=UTF-8', responseStr, testStartDate)
 
     where:
@@ -49,7 +50,7 @@ abstract class TechempowerBenchmarkSpec extends Specification {
   void assertResponseHeaders(Response response, String expectedContentType, String responseText, Date testStartTime) {
     assert response.contentType == expectedContentType
     assert response.header(HttpHeaders.Names.CONTENT_LENGTH) == responseText.getBytes().length.toString()
-    assert response.header(HttpHeaders.Names.SERVER) == ResponseData.SERVER_NAME.toString()
+    assert response.header(HttpHeaders.Names.SERVER) == SERVER_NAME.toString()
     def headerDate = new SimpleDateFormat(DATE_FORMAT).parse(response.header(HttpHeaders.Names.DATE))
     assert testStartTime.time.intdiv(1000) <= headerDate.time.intdiv(1000)
     assert headerDate <= new Date()
