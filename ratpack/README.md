@@ -35,7 +35,7 @@ The tests were run with:
 * [Netty 4.0.15.FINAL](http://netty.io)
 * [Jackson 2.3.1](https://github.com/FasterXML/jackson)
 * [HikariCP 1.2.8](https://github.com/brettwooldridge/HikariCP)
-* [MySQL Conncector/J 5.1.28](http://dev.mysql.com/downloads/connector/j/)
+* [MySQL Connector/J 5.1.28](http://dev.mysql.com/downloads/connector/j/)
 
 ## Test URLs
 ### JSON Serialization Test
