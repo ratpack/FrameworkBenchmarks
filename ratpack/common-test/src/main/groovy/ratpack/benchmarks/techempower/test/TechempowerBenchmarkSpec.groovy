@@ -32,10 +32,7 @@ abstract class TechempowerBenchmarkSpec extends Specification {
     then:
     def responseStr = response.asString()
     responseStr == """{"${MESSAGE_KEY}":"${MESSAGE_VALUE}"}"""
-    assertResponseHeaders(response, 'application/json', responseStr, testStartDate)
-
-    where:
-    testStartDate = new Date()
+    assertResponseHeaders(response, 'application/json', responseStr)
   }
 
   def "plaintext test type fulfills requirements"() {
@@ -45,13 +42,10 @@ abstract class TechempowerBenchmarkSpec extends Specification {
     then:
     def responseStr = response.asString()
     responseStr == MESSAGE_VALUE
-    assertResponseHeaders(response, 'text/plain;charset=UTF-8', responseStr, testStartDate)
-
-    where:
-    testStartDate = new Date()
+    assertResponseHeaders(response, 'text/plain;charset=UTF-8', responseStr)
   }
 
-  void assertResponseHeaders(Response response, String expectedContentType, String responseText, Date testStartTime) {
+  void assertResponseHeaders(Response response, String expectedContentType, String responseText) {
     assert response.contentType == expectedContentType
     assert response.header(HttpHeaders.Names.CONTENT_LENGTH) == responseText.getBytes().length.toString()
     assert response.header(HttpHeaders.Names.SERVER) == SERVER_NAME.toString()

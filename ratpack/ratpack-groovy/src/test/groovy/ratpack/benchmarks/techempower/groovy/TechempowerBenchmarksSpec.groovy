@@ -49,10 +49,7 @@ class TechempowerBenchmarksSpec extends ratpack.benchmarks.techempower.test.Tech
       getInt("id") >= 1 && getInt("id") <= DB_ROWS
       getInt("randomNumber") != null
     }
-    assertResponseHeaders(responseClone, 'application/json', responseBody, testStartDate)
-
-    where:
-    testStartDate = new Date()
+    assertResponseHeaders(responseClone, 'application/json', responseBody)
   }
 
   /**
