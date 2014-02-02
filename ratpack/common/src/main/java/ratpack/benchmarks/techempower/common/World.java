@@ -6,6 +6,7 @@ public class World {
 
   private int id;
   private int randomNumber;
+  public static final int DB_ROWS = 10000;
 
   public World(int id, int randomNumber) {
     this.id = id;
@@ -22,7 +23,7 @@ public class World {
 
   public static int randomId() {
     // World ids range from 1 to 10000
-    return 1 + ThreadLocalRandom.current().nextInt(10000);
+    return 1 + ThreadLocalRandom.current().nextInt(DB_ROWS);
   }
 
 }

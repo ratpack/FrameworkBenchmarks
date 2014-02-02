@@ -4,6 +4,7 @@ import ratpack.benchmarks.techempower.groovy.DataAccessModule
 import ratpack.benchmarks.techempower.groovy.WorldService
 import ratpack.groovy.sql.SqlModule
 import ratpack.jackson.JacksonModule
+import ratpack.remote.RemoteControlModule
 
 import static ratpack.benchmarks.techempower.common.ResponseData.*
 import static ratpack.groovy.Groovy.ratpack
@@ -16,6 +17,7 @@ ratpack {
     register new SqlModule()
     register new JacksonModule()
     register new DataAccessModule()
+    register new RemoteControlModule()
   }
 
   handlers {
