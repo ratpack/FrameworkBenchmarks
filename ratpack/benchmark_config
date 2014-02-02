@@ -9,7 +9,7 @@
       "port": 5050,
       "approach": "Realistic",
       "classification": "Micro",
-      "database": "None",
+      "database": "MySQL",
       "framework": "ratpack",
       "language": "Groovy",
       "orm": "Raw",

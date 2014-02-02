@@ -7,4 +7,5 @@ dependencies {
     exclude group: "org.codehaus.groovy"
   }
   compile "org.codehaus.groovy:groovy-all:2.2.1"
+  compile "io.ratpack:ratpack-remote-test:${versions.ratpack}"
 }

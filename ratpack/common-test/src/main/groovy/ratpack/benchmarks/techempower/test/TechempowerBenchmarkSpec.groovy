@@ -6,6 +6,7 @@ import ratpack.groovy.test.TestHttpClient
 import ratpack.groovy.test.TestHttpClients
 import ratpack.test.ServerBackedApplicationUnderTest
 import spock.lang.AutoCleanup
+import spock.lang.Shared
 import spock.lang.Specification
 
 import java.text.SimpleDateFormat
@@ -16,8 +17,11 @@ abstract class TechempowerBenchmarkSpec extends Specification {
 
   private final static DATE_FORMAT = 'EEE, dd MMM yyyy HH:mm:ss z'
 
-  @AutoCleanup ServerBackedApplicationUnderTest aut = createApplicationUnderTest()
-  @Delegate TestHttpClient client = TestHttpClients.testHttpClient(aut)
+  @AutoCleanup
+  @Shared
+  ServerBackedApplicationUnderTest aut = createApplicationUnderTest()
+  @Delegate
+  TestHttpClient client = TestHttpClients.testHttpClient(aut)
 
   abstract ServerBackedApplicationUnderTest createApplicationUnderTest()
 
