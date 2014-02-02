@@ -1,43 +1,57 @@
-# Ratpack/Groovy Benchmarking Test
+# Ratpack Benchmarking Test
 
-This is the Ratpack/Groovy portion of a [benchmarking test suite](../) comparing a variety of web development platforms.
+This is the Ratpack portion of a [benchmarking test suite](../) comparing a variety of web development platforms.
 
-Ratpack apps can be written in Groovy or Java. This variation focuses mostly on developer productivity
-utilizing Ratpack's idiomatic Groovy DSL, rather than trying to squeeze every last bit of performance out of it by
-using straight Java or other low-level performance-tuning techniques. Another variation should follow shortly
-(e.g. Ratpack/Java), which will focus on raw performance.
+Ratpack apps can be written in either Groovy or Java. This project contains benchmarks written in both, under 
+the [ratpack-groovy](ratpack-groovy) and [ratpack-java](ratpack-java) directories respectively. 
 
-Currently, there are two test permutations, the "default" one exercising the JSON Serialization and Plaintext
-test types on Linux and the "default-windows" one, exercising the same test types on Windows
-(see [benchmark_config](benchmark_config) for further details). More will follow soon, along with the implementation
-of the [remaining test types](#todo).
+The `ratpack-groovy` module focuses mostly on developer productivity utilizing Ratpack's idiomatic Groovy DSL, rather 
+than trying to squeeze every last bit of performance out of it by using straight Java or other performance-tuning 
+techniques. `ratpack-java` on the other hand, focuses on raw performance using Java top to bottom and taking advantage 
+of low-level optimizations where possible.
+
+Currently, there are two test permutations, the "default" one exercising the required test types using the Groovy DSL, 
+and the "java" one exercising the same test types using the Java DSL, both running on Linux (see [benchmark_config](benchmark_config) 
+for further details). More will follow soon, along with the implementation of the [remaining test types](#todo).
 
 ### JSON Serialization Test
 
-* [JSON test source](src/ratpack/Ratpack.groovy)
+* [Groovy JSON test source](ratpack-groovy/src/ratpack/Ratpack.groovy)
+* [Java JSON test source](ratpack-java/src/main/java/ratpack/benchmarks/techempower/java/HandlerFactory.java)
+
+### Single Database Query Test
+
+* [Groovy Single DB Query test source](ratpack-groovy/src/ratpack/Ratpack.groovy)
 
 ### Plaintext Test
 
-* [Plaintext test source](src/ratpack/Ratpack.groovy)
+* [Groovy Plaintext test source](ratpack-groovy/src/ratpack/Ratpack.groovy)
+* [Java Plaintext test source](ratpack-java/src/main/java/ratpack/benchmarks/techempower/java/HandlerFactory.java)
 
 ## Infrastructure Software Versions
 The tests were run with:
-* [Ratpack 0.9.0](http://ratpack.io)
+* [Ratpack 0.9.2-SNAPSHOT](http://ratpack.io)
 * [Groovy 2.2.1](http://groovy.codehaus.org)
-* [Netty 4.0.12.FINAL](http://netty.io)
-* [Jackson 2.2.2](https://github.com/FasterXML/jackson)
+* [Netty 4.0.15.FINAL](http://netty.io)
+* [Jackson 2.3.1](https://github.com/FasterXML/jackson)
+* [HikariCP 1.2.8](https://github.com/brettwooldridge/HikariCP)
+* [MySQL Conncector/J 5.1.28](http://dev.mysql.com/downloads/connector/j/)
 
 ## Test URLs
 ### JSON Serialization Test
 
 http://localhost:5050/json
 
+### Single Database Query Test
+
+http://localhost:5050/db
+
 ### Plaintext Test
 
 http://localhost:5050/plaintext
 
 ##TODO
-* Implement "Single database query" test type
+* Implement Java version of "Single database query" test type
 * Implement "Multiple database queries" test type
 * Implement "Fortunes" test type
 * Implement "Database updates" test type
