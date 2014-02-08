@@ -2,11 +2,11 @@ package ratpack.benchmarks.techempower.java;
 
 import io.netty.handler.codec.http.HttpHeaders;
 import ratpack.benchmarks.techempower.common.ResponseData;
+import ratpack.func.Action;
 import ratpack.handling.Chain;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
 import ratpack.http.MutableHeaders;
-import ratpack.util.Action;
 
 import java.util.Date;
 import java.util.HashMap;
