@@ -23,6 +23,10 @@ for further details). More will follow soon, along with the implementation of th
 
 * [Groovy Single DB Query test source](ratpack-groovy/src/ratpack/Ratpack.groovy)
 
+### Multiple Database Queries Test
+
+* [Groovy Multiple DB Queries test source](ratpack-groovy/src/ratpack/Ratpack.groovy)
+
 ### Plaintext Test
 
 * [Groovy Plaintext test source](ratpack-groovy/src/ratpack/Ratpack.groovy)
@@ -46,12 +50,16 @@ http://localhost:5050/json
 
 http://localhost:5050/db
 
+### Multiple Database Queries Test
+
+http://localhost:5050/queries
+
 ### Plaintext Test
 
 http://localhost:5050/plaintext
 
 ##TODO
 * Implement Java version of "Single database query" test type
-* Implement "Multiple database queries" test type
+* Implement Java version of "Multiple database queries" test type
 * Implement "Fortunes" test type
 * Implement "Database updates" test type
