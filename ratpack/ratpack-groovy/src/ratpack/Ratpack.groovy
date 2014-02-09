@@ -1,5 +1,6 @@
 import io.netty.handler.codec.http.HttpHeaders
 import ratpack.benchmarks.techempower.common.HikariCPModule
+import ratpack.benchmarks.techempower.common.RequestData
 import ratpack.benchmarks.techempower.groovy.DataAccessModule
 import ratpack.benchmarks.techempower.groovy.WorldService
 import ratpack.groovy.sql.SqlModule
@@ -36,6 +37,15 @@ ratpack {
     get("db") { WorldService ws ->
       background {
         ws.findByRandomId()
+      } then {
+        render json(it)
+      }
+    }
+
+    // Test type 3: Multiple database queries
+    get("queries") { WorldService ws ->
+      background {
+        ws.findByRandomIdMulti(RequestData.queryCount(request.queryParams.queries))
       } then {
         render json(it)
       }

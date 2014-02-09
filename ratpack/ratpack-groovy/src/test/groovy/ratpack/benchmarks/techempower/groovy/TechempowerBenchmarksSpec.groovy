@@ -49,4 +49,39 @@ class TechempowerBenchmarksSpec extends ratpack.benchmarks.techempower.test.Tech
     }
     assertResponseHeaders(responseClone, 'application/json')
   }
+
+  def "multiple queries test type fulfils requirements"() {
+    when:
+    get("queries$queryString")
+
+    then:
+    def responseBody = response.asString()
+    def responseClone = cloneResponse(response, responseBody)
+    with(responseClone.jsonPath()) {
+      getList("").size() == worldCount
+      getList("").each {
+        it.size() == 2
+        it.id >= 1 && it.id <= DB_ROWS
+        it.randomNumber != null
+      }
+    }
+    assertResponseHeaders(responseClone, 'application/json')
+
+    where:
+    queries | worldCount
+    null    | 1
+    ''      | 1
+    'foo'   | 1
+    0       | 1
+    -1      | 1
+    500     | 500
+    501     | 500
+    1       | 1
+    5       | 5
+    10      | 10
+    15      | 15
+    20      | 20
+
+    queryString = queries == null ? '' : "?queries=$queries"
+  }
 }
