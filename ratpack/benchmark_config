@@ -5,6 +5,7 @@
       "setup_file": "setup_groovy",
       "json_url": "/json",
       "db_url": "/db",
+      "query_url": "/queries?queries=",
       "plaintext_url": "/plaintext",
       "port": 5050,
       "approach": "Realistic",
