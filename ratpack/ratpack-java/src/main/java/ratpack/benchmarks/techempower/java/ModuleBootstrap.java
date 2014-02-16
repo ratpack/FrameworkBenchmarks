@@ -1,8 +1,8 @@
 package ratpack.benchmarks.techempower.java;
 
+import ratpack.func.Action;
 import ratpack.guice.ModuleRegistry;
 import ratpack.jackson.JacksonModule;
-import ratpack.util.Action;
 
 public class ModuleBootstrap implements Action<ModuleRegistry> {
 

@@ -1,4 +1,8 @@
 apply plugin: "ratpack-groovy"
 
+dependencies {
+  compile "io.ratpack:ratpack-remote:${versions.ratpack}"
+}
+
 // Suppress testing warnings, caused by rest-assured Groovy dependency
 configurations.testCompile.dependencies.find { it.name == "ratpack-groovy-test" }?.exclude(group: "org.codehaus.groovy")
