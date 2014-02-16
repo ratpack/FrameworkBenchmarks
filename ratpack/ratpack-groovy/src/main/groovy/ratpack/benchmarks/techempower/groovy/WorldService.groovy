@@ -28,9 +28,28 @@ class WorldService {
     return worlds
   }
 
+  World[] updateByRandomIdMulti(int queryCount) {
+    World[] worlds = new World[queryCount]
+    for (i in 0..queryCount-1) {
+      World world = findByRandomId()
+      world.randomNumber = World.randomId()
+      worlds[i] = world
+    }
+    batchUpdate(worlds)
+    return worlds
+  }
+
   World find(int id) {
     def row = sql.firstRow("select * from World where id = $id")
     row ? new World(id, row.randomNumber) : null
+  }
+
+  void batchUpdate(World[] worlds) {
+    sql.withBatch { stmt ->
+      worlds.each {
+        stmt.addBatch("update World set randomNumber = $it.randomNumber where id = $it.id")
+      }
+    }
   }
 
 }

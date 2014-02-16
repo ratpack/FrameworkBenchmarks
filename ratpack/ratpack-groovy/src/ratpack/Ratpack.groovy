@@ -51,6 +51,15 @@ ratpack {
       }
     }
 
+    // Test type 5: Database updates
+    get("updates") { WorldService ws ->
+      background {
+        ws.updateByRandomIdMulti(RequestData.queryCount(request.queryParams.queries))
+      } then {
+        render json(it)
+      }
+    }
+
     // Test type 6: Plaintext
     get("plaintext") {
       // using response.send() directly, by-passing any render() overhead
