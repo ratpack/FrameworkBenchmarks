@@ -1,5 +1,6 @@
 package ratpack.benchmarks.techempower.groovy
 
+import com.jayway.restassured.response.Response
 import groovy.sql.Sql
 import ratpack.benchmarks.techempower.common.World
 import ratpack.groovy.test.LocalScriptApplicationUnderTest
@@ -45,7 +46,7 @@ class TechempowerBenchmarksSpec extends ratpack.benchmarks.techempower.test.Tech
     with(responseClone.jsonPath()) {
       getMap("").size() == 2
       getInt("id") >= 1 && getInt("id") <= DB_ROWS
-      getInt("randomNumber") != null
+      getInt("randomNumber") >= 1 && getInt("randomNumber") <= DB_ROWS
     }
     assertResponseHeaders(responseClone, 'application/json')
   }
@@ -57,31 +58,61 @@ class TechempowerBenchmarksSpec extends ratpack.benchmarks.techempower.test.Tech
     then:
     def responseBody = response.asString()
     def responseClone = cloneResponse(response, responseBody)
-    with(responseClone.jsonPath()) {
-      getList("").size() == worldCount
-      getList("").each {
-        it.size() == 2
-        it.id >= 1 && it.id <= DB_ROWS
-        it.randomNumber != null
-      }
-    }
+    assertMultiQueryResponseBody(responseClone, worldCount)
     assertResponseHeaders(responseClone, 'application/json')
 
     where:
-    queries | worldCount
-    null    | 1
-    ''      | 1
-    'foo'   | 1
-    0       | 1
-    -1      | 1
-    500     | 500
-    501     | 500
-    1       | 1
-    5       | 5
-    10      | 10
-    15      | 15
-    20      | 20
+    queries << worldCountForQueriesMap().keySet()
+    worldCount = worldCountForQueriesMap().get(queries)
+    queryString = getQueryString(queries)
+  }
 
-    queryString = queries == null ? '' : "?queries=$queries"
+  // TODO: Test also whether the records are actually updated in the DB
+  def "database updates test type fulfils requirements"() {
+    when:
+    get("updates$queryString")
+
+    then:
+    def responseBody = response.asString()
+    def responseClone = cloneResponse(response, responseBody)
+    assertMultiQueryResponseBody(responseClone, worldCount)
+    assertResponseHeaders(responseClone, 'application/json')
+
+    where:
+    queries << worldCountForQueriesMap().keySet()
+    worldCount = worldCountForQueriesMap().get(queries)
+    queryString = getQueryString(queries)
+  }
+
+  void assertMultiQueryResponseBody(Response response, int worldCount) {
+    with(response.jsonPath()) {
+      assert getList("").size() == worldCount
+      getList("").each {
+        assert it.size() == 2
+        assert it.id >= 1 && it.id <= DB_ROWS
+        assert it.randomNumber >= 1 && it.randomNumber <= DB_ROWS
+      }
+    }
+  }
+
+  Map worldCountForQueriesMap() {
+    return [
+      null  : 1,
+      ''    : 1,
+      'foo' : 1,
+      0     : 1,
+      (-1)  : 1,
+      500   : 500,
+      501   : 500,
+      1     : 1,
+      5     : 5,
+      10    : 10,
+      15    : 15,
+      20    : 20
+    ]
+  }
+
+  String getQueryString(queries) {
+    return queries == null ? '' : "?queries=$queries"
   }
 }
