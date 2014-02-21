@@ -2,6 +2,8 @@ apply plugin: "ratpack-groovy"
 
 dependencies {
   compile "io.ratpack:ratpack-remote:${versions.ratpack}"
+
+  testRuntime "com.h2database:h2:1.3.174"
 }
 
 // Suppress testing warnings, caused by rest-assured Groovy dependency
