@@ -1,6 +1,7 @@
 package ratpack.benchmarks.techempower.groovy
 
-import com.jayway.restassured.response.Response
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import groovy.sql.Sql
 import ratpack.benchmarks.techempower.common.World
 import ratpack.groovy.test.LocalScriptApplicationUnderTest
@@ -62,31 +63,43 @@ class TechempowerBenchmarksSpec extends ratpack.benchmarks.techempower.test.Tech
     return queries == null ? '' : "?queries=$queries"
   }
 
+  JsonNode parseJson(String json) {
+    new ObjectMapper().readTree(json)
+  }
+
+  void assertMultiQueryResponseBody(String responseBody, int worldCount) {
+    def json = parseJson(responseBody)
+    assert json.size() == worldCount
+    json.each {
+      assert it.size() == 2
+      assert it.id.asInt() >= 1 && it.id.asInt() <= DB_ROWS
+      assert it.randomNumber.asInt() >= 1 && it.randomNumber.asInt() <= DB_ROWS
+    }
+  }
+
   def "single query test type fulfils requirements"() {
     when:
     get("db")
 
     then:
     def responseBody = response.asString()
-    def responseClone = cloneResponse(response, responseBody)
-    with(responseClone.jsonPath()) {
-      getMap("").size() == 2
-      getInt("id") >= 1 && getInt("id") <= DB_ROWS
-      getInt("randomNumber") >= 1 && getInt("randomNumber") <= DB_ROWS
+    with(parseJson(responseBody)) {
+      size() == 2
+      id.asInt() >= 1 && id.asInt() <= DB_ROWS
+      randomNumber.asInt() >= 1 && randomNumber.asInt() <= DB_ROWS
     }
-    assertResponseHeaders(responseClone, 'application/json')
+    assertResponseHeaders(response, 'application/json', responseBody)
   }
 
   @Unroll
-  def "multiple queries test type fulfils requirements - requesting '#queries' queries"() {
+  def "database updates test type fulfils requirements - updating '#queries' queries"() {
     when:
-    get("queries$queryString")
+    get("updates$queryString")
 
     then:
     def responseBody = response.asString()
-    def responseClone = cloneResponse(response, responseBody)
-    assertMultiQueryResponseBody(responseClone, worldCount)
-    assertResponseHeaders(responseClone, 'application/json')
+    assertMultiQueryResponseBody(responseBody, worldCount)
+    assertResponseHeaders(response, 'application/json', responseBody)
 
     where:
     queries << worldCountForQueriesMap.keySet()
@@ -96,30 +109,18 @@ class TechempowerBenchmarksSpec extends ratpack.benchmarks.techempower.test.Tech
 
   // TODO: Test also whether the records are actually updated in the DB
   @Unroll
-  def "database updates test type fulfils requirements - updating '#queries' queries"() {
+  def "multiple queries test type fulfils requirements - requesting '#queries' queries"() {
     when:
-    get("updates$queryString")
+    get("queries$queryString")
 
     then:
     def responseBody = response.asString()
-    def responseClone = cloneResponse(response, responseBody)
-    assertMultiQueryResponseBody(responseClone, worldCount)
-    assertResponseHeaders(responseClone, 'application/json')
+    assertMultiQueryResponseBody(responseBody, worldCount)
+    assertResponseHeaders(response, 'application/json', responseBody)
 
     where:
     queries << worldCountForQueriesMap.keySet()
     worldCount = worldCountForQueriesMap.get(queries)
     queryString = getQueriesQueryString(queries)
-  }
-
-  void assertMultiQueryResponseBody(Response response, int worldCount) {
-    with(response.jsonPath()) {
-      assert getList("").size() == worldCount
-      getList("").each {
-        assert it.size() == 2
-        assert it.id >= 1 && it.id <= DB_ROWS
-        assert it.randomNumber >= 1 && it.randomNumber <= DB_ROWS
-      }
-    }
   }
 }

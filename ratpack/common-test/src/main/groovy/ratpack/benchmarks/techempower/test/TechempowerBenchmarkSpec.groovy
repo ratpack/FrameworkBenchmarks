@@ -33,8 +33,7 @@ abstract class TechempowerBenchmarkSpec extends Specification {
     then:
     def responseBody = response.asString()
     responseBody == """{"${MESSAGE_KEY}":"${MESSAGE_VALUE}"}"""
-    def responseClone = cloneResponse(response, responseBody)
-    assertResponseHeaders(responseClone, 'application/json')
+    assertResponseHeaders(response, 'application/json', responseBody)
   }
 
   def "plaintext test type fulfills requirements"() {
@@ -44,33 +43,14 @@ abstract class TechempowerBenchmarkSpec extends Specification {
     then:
     def responseBody = response.asString()
     responseBody == MESSAGE_VALUE
-    def responseClone = cloneResponse(response, responseBody)
-    assertResponseHeaders(responseClone, 'text/plain;charset=UTF-8')
+    assertResponseHeaders(response, 'text/plain;charset=UTF-8', responseBody)
   }
 
-  void assertResponseHeaders(Response response, String expectedContentType) {
+  void assertResponseHeaders(Response response, String expectedContentType, String responseText) {
     assert response.contentType == expectedContentType
-    assert response.header(HttpHeaders.Names.CONTENT_LENGTH) == response.asByteArray().length.toString()
+    assert response.header(HttpHeaders.Names.CONTENT_LENGTH) == responseText.bytes.length.toString()
     assert response.header(HttpHeaders.Names.SERVER) == SERVER_NAME.toString()
     def headerDate = new SimpleDateFormat(DATE_FORMAT).parse(response.header(HttpHeaders.Names.DATE))
     assert headerDate <= new Date()
-  }
-
-  /**
-   * Workaround to avoid {@code java.io.IOException: Attempted read on closed stream}.
-   * <p>
-   * Calling {@link com.jayway.restassured.internal.RestAssuredResponseImpl#asString()}
-   * after having called {@link com.jayway.restassured.internal.RestAssuredResponseImpl#jsonPath()}
-   * (or calling {@link com.jayway.restassured.internal.RestAssuredResponseImpl#asString()}
-   * or {@link com.jayway.restassured.internal.RestAssuredResponseImpl#asByteArray()} twice)
-   * will attempt a read on an {@code InputStream} which is already closed from the first call.
-   * <p>
-   * The workaround is to clone the response and issue the second call to the clone rather than
-   * to the original response object.
-   */
-  Response cloneResponse(Response response, String responseBody) {
-    final Response clone = new ResponseBuilder().clone(response).setBody(responseBody).build()
-    clone.hasExpectations = true
-    return clone
   }
 }
