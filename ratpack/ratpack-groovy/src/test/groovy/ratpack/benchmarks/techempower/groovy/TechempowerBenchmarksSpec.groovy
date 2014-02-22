@@ -77,6 +77,19 @@ class TechempowerBenchmarksSpec extends ratpack.benchmarks.techempower.test.Tech
     }
   }
 
+  void assertUpdatesPerformed(String responseBody) {
+    //map updated worlds to check for the last randomNumber if there have been any id clashes
+    def worlds = parseJson(responseBody).collectEntries { [it.id.asInt(), it.randomNumber.asInt()] }
+    def randomNumbers = remote.exec {
+      def sql = get(Sql)
+      //I don't seem to be able to find a way to select multiple items using a list of ids...
+      worlds.keySet().collect {
+        sql.firstRow("select randomNumber from World where id = $it").randomNumber
+      }
+    }
+    assert randomNumbers == worlds.values().toList()
+  }
+
   def "single query test type fulfils requirements"() {
     when:
     get("db")
@@ -100,6 +113,7 @@ class TechempowerBenchmarksSpec extends ratpack.benchmarks.techempower.test.Tech
     def responseBody = response.asString()
     assertMultiQueryResponseBody(responseBody, worldCount)
     assertResponseHeaders(response, 'application/json', responseBody)
+    assertUpdatesPerformed(responseBody)
 
     where:
     queries << worldCountForQueriesMap.keySet()
@@ -107,7 +121,6 @@ class TechempowerBenchmarksSpec extends ratpack.benchmarks.techempower.test.Tech
     queryString = getQueriesQueryString(queries)
   }
 
-  // TODO: Test also whether the records are actually updated in the DB
   @Unroll
   def "multiple queries test type fulfils requirements - requesting '#queries' queries"() {
     when:
