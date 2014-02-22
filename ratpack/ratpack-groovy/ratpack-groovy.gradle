@@ -2,6 +2,7 @@ apply plugin: "ratpack-groovy"
 
 dependencies {
   compile "io.ratpack:ratpack-remote:${versions.ratpack}"
+  compile "io.ratpack:ratpack-hikari:${versions.ratpack}"
 
   testRuntime "com.h2database:h2:1.3.174"
 }

@@ -1,9 +1,9 @@
 import io.netty.handler.codec.http.HttpHeaders
-import ratpack.benchmarks.techempower.common.HikariCPModule
 import ratpack.benchmarks.techempower.common.RequestData
 import ratpack.benchmarks.techempower.groovy.DataAccessModule
 import ratpack.benchmarks.techempower.groovy.WorldService
 import ratpack.groovy.sql.SqlModule
+import ratpack.hikari.HikariModule
 import ratpack.jackson.JacksonModule
 import ratpack.remote.RemoteControlModule
 
@@ -14,7 +14,7 @@ import static ratpack.jackson.Jackson.json
 ratpack {
 
   modules {
-    register new HikariCPModule("hikaricp.properties")
+    register new HikariModule()
     register new SqlModule()
     register new JacksonModule()
     register new DataAccessModule()

@@ -15,7 +15,11 @@ class TechempowerBenchmarksSpec extends ratpack.benchmarks.techempower.test.Tech
   @Shared RemoteControl remote = new RemoteControl(aut)
 
   ServerBackedApplicationUnderTest createApplicationUnderTest() {
-    new LocalScriptApplicationUnderTest('other.remoteControl.enabled': 'true')
+    new LocalScriptApplicationUnderTest(
+      'other.remoteControl.enabled': 'true',
+      'other.hikari.dataSourceClassName': 'org.h2.jdbcx.JdbcDataSource',
+      'other.hikari.dataSourceProperties.URL': 'jdbc:h2:mem:dev'
+    )
   }
 
   def setupSpec() {
