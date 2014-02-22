@@ -1,6 +1,6 @@
 import io.netty.handler.codec.http.HttpHeaders
-import ratpack.benchmarks.techempower.common.RequestData
 import ratpack.benchmarks.techempower.groovy.DataAccessModule
+import ratpack.benchmarks.techempower.groovy.QueryCountAcceptingBackgroundHandler
 import ratpack.benchmarks.techempower.groovy.WorldService
 import ratpack.groovy.sql.SqlModule
 import ratpack.hikari.HikariModule
@@ -43,22 +43,14 @@ ratpack {
     }
 
     // Test type 3: Multiple database queries
-    get("queries") { WorldService ws ->
-      background {
-        ws.findByRandomIdMulti(RequestData.queryCount(request.queryParams.queries))
-      } then {
-        render json(it)
-      }
-    }
+    get("queries", new QueryCountAcceptingBackgroundHandler({ WorldService worldService, int queryCount ->
+      worldService.findByRandomIdMulti(queryCount)
+    }))
 
     // Test type 5: Database updates
-    get("updates") { WorldService ws ->
-      background {
-        ws.updateByRandomIdMulti(RequestData.queryCount(request.queryParams.queries))
-      } then {
-        render json(it)
-      }
-    }
+    get("updates",new QueryCountAcceptingBackgroundHandler({ WorldService worldService, int queryCount ->
+      worldService.updateByRandomIdMulti(queryCount)
+    }))
 
     // Test type 6: Plaintext
     get("plaintext") {
