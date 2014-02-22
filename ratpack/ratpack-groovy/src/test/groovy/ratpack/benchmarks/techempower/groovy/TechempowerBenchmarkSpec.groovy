@@ -12,7 +12,7 @@ import spock.lang.Unroll
 
 import static ratpack.benchmarks.techempower.common.World.DB_ROWS
 
-class TechempowerBenchmarksSpec extends ratpack.benchmarks.techempower.test.TechempowerBenchmarkSpec {
+class TechempowerBenchmarkSpec extends ratpack.benchmarks.techempower.test.TechempowerBenchmarkSpec {
 
   @Shared RemoteControl remote = new RemoteControl(aut)
 
