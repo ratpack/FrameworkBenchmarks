@@ -22,7 +22,7 @@ class WorldService {
     World[] worlds = new World[queryCount]
     // seems to be a bit more efficient than
     // other groovier looping methods
-    for (i in 0..queryCount-1) {
+    for (i in 0..<queryCount) {
       worlds[i] = findByRandomId()
     }
     return worlds
@@ -30,7 +30,7 @@ class WorldService {
 
   World[] updateByRandomIdMulti(int queryCount) {
     World[] worlds = new World[queryCount]
-    for (i in 0..queryCount-1) {
+    for (i in 0..<queryCount) {
       World world = findByRandomId()
       world.randomNumber = World.randomId()
       worlds[i] = world
