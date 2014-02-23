@@ -8,33 +8,32 @@ import java.util.concurrent.TimeUnit
 
 class RunInBackground extends DefaultTask {
 
-    String command
-    List<String> args = []
-    File directory
-    String readyText
-    int timeout = 10
+  String command
+  List<String> args = []
+  File directory
+  String readyText
+  int timeout = 10
 
 
-    @TaskAction
-    void start() {
-        def process = new ProcessBuilder(command, *args).directory(directory).start()
-        project.ext.applicationUnderTest = process
+  @TaskAction
+  void start() {
+    def process = new ProcessBuilder(command, * args).directory(directory).redirectErrorStream(true).start()
 
-        def latch = new CountDownLatch(1)
-        Thread.start {
-            try {
-                process.errorStream.eachLine { String line ->
-                    if (latch.count) {
-                        if (line.contains(readyText)) {
-                            latch.countDown()
-                        }
-                    }
-                }
-            } catch (IOException ignore) {}
+    def latch = new CountDownLatch(1)
+    Thread.start {
+      try {
+        process.inputStream.eachLine { String line ->
+          if (latch.count) {
+            if (line.contains(readyText)) {
+              latch.countDown()
+            }
+          }
         }
-
-        if (!latch.await(timeout, TimeUnit.SECONDS)) {
-            throw new RuntimeException("Timeout waiting for application to start")
-        }
+      } catch (IOException ignore) {}
     }
+
+    if (!latch.await(timeout, TimeUnit.SECONDS)) {
+      throw new RuntimeException("Timeout waiting for application to start")
+    }
+  }
 }

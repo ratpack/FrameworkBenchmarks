@@ -4,10 +4,8 @@ import os
 import setup_util
 
 def start(args, logfile, errfile):
-  setup_util.replace_text("ratpack/common/src/main/resources/hikaricp.properties", "localhost", args.database_host)
-
   try:
-    subprocess.check_call("./gradlew clean ratpack-groovy:runInBackground", shell=True, cwd="ratpack", stderr=errfile, stdout=logfile)
+    subprocess.check_call("./gradlew -PdatabaseHost=" + args.database_host + " clean ratpack-groovy:runInBackground", shell=True, cwd="ratpack", stderr=errfile, stdout=logfile)
     return 0
   except subprocess.CalledProcessError:
     return 1

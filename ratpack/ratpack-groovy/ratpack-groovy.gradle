@@ -1,5 +1,9 @@
 apply plugin: "ratpack-groovy"
 
+if (project.hasProperty('databaseHost')) {
+  applicationDefaultJvmArgs = ["-Dratpack.other.hikari.dataSourceProperties.url=jdbc:mysql://${project.databaseHost}:3306/hello_world"]
+}
+
 dependencies {
   compile "io.ratpack:ratpack-remote:${versions.ratpack}"
   compile "io.ratpack:ratpack-hikari:${versions.ratpack}"
