@@ -2,7 +2,6 @@ import io.netty.handler.codec.http.HttpHeaders
 import ratpack.benchmarks.techempower.groovy.DataAccessModule
 import ratpack.benchmarks.techempower.groovy.QueryCountAcceptingBackgroundHandler
 import ratpack.benchmarks.techempower.groovy.WorldService
-import ratpack.groovy.sql.SqlModule
 import ratpack.hikari.HikariModule
 import ratpack.jackson.JacksonModule
 import ratpack.remote.RemoteControlModule
@@ -15,10 +14,10 @@ ratpack {
 
   modules {
     register new HikariModule()
-    register new SqlModule()
     register new JacksonModule()
     register new DataAccessModule()
     register new RemoteControlModule()
+    bind(WorldService)
   }
 
   handlers {

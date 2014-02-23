@@ -20,22 +20,28 @@ class WorldService {
 
   World[] findByRandomIdMulti(int queryCount) {
     World[] worlds = new World[queryCount]
-    // seems to be a bit more efficient than
-    // other groovier looping methods
-    for (i in 0..<queryCount) {
-      worlds[i] = findByRandomId()
+    sql.cacheStatements {
+      // seems to be a bit more efficient than
+      // other groovier looping methods
+      for (i in 0..<queryCount) {
+        worlds[i] = findByRandomId()
+      }
     }
+    sql.close()
     return worlds
   }
 
   World[] updateByRandomIdMulti(int queryCount) {
     World[] worlds = new World[queryCount]
-    for (i in 0..<queryCount) {
-      World world = findByRandomId()
-      world.randomNumber = World.randomId()
-      worlds[i] = world
+    sql.cacheStatements {
+      for (i in 0..<queryCount) {
+        World world = findByRandomId()
+        world.randomNumber = World.randomId()
+        worlds[i] = world
+      }
+      batchUpdate(worlds)
     }
-    batchUpdate(worlds)
+    sql.close()
     return worlds
   }
 

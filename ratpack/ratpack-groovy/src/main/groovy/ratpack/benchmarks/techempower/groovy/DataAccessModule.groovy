@@ -1,13 +1,14 @@
 package ratpack.benchmarks.techempower.groovy
 
 import com.google.inject.AbstractModule
-import com.google.inject.Scopes
+import groovy.sql.Sql
+import ratpack.groovy.sql.SqlProvider
 
 class DataAccessModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    bind(WorldService.class).in(Scopes.SINGLETON)
+    bind(Sql).toProvider(SqlProvider)
   }
 
 }
