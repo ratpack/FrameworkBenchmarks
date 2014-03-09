@@ -2,11 +2,11 @@
 
 This is the Ratpack portion of a [benchmarking test suite](../) comparing a variety of web development platforms.
 
-Ratpack apps can be written in either Groovy or Java. This project contains benchmarks written in both, under 
-the [ratpack-groovy](ratpack-groovy) and [ratpack-java](ratpack-java) directories respectively. 
+Ratpack apps can be written in either Groovy or Java. This project includes benchmarks written in both languages,
+under the [ratpack-groovy](ratpack-groovy) and [ratpack-java](ratpack-java) directories respectively.
 
 The `ratpack-groovy` module focuses mostly on developer productivity utilizing Ratpack's idiomatic Groovy DSL, rather 
-than trying to squeeze every last bit of performance out of it by using straight Java or other performance-tuning 
+than trying to squeeze every last bit of performance out of it by using pure Java or other performance-tuning
 techniques. `ratpack-java` on the other hand, focuses on raw performance using Java top to bottom and taking advantage 
 of low-level optimizations where possible.
 
@@ -26,6 +26,10 @@ for further details). More will follow soon, along with the implementation of th
 ### Multiple Database Queries Test
 
 * [Groovy Multiple DB Queries test source](ratpack-groovy/src/ratpack/Ratpack.groovy)
+
+### Fortunes Test
+
+* [Groovy Fortunes test source](ratpack-groovy/src/ratpack/Ratpack.groovy)
 
 ### Database Updates Test
 
@@ -58,6 +62,10 @@ http://localhost:5050/db
 
 http://localhost:5050/queries
 
+### Fortunes Test
+
+http://localhost:5050/fortunes
+
 ### Database Updates Test
 
 http://localhost:5050/updates
@@ -69,5 +77,5 @@ http://localhost:5050/plaintext
 ##TODO
 * Implement Java version of "Single database query" test type
 * Implement Java version of "Multiple database queries" test type
-* Implement "Fortunes" test type
+* Implement Java version of "Fortunes" test type
 * Implement Java version of "Database updates" test type
