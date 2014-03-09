@@ -10,9 +10,27 @@ import ratpack.test.remote.RemoteControl
 import spock.lang.Shared
 import spock.lang.Unroll
 
+import static com.google.common.html.HtmlEscapers.htmlEscaper
+import static ratpack.benchmarks.techempower.common.Fortune.ADDITIONAL_FORTUNE
 import static ratpack.benchmarks.techempower.common.World.DB_ROWS
 
 class TechempowerBenchmarkSpec extends ratpack.benchmarks.techempower.test.TechempowerBenchmarkSpec {
+
+  // See https://github.com/TechEmpower/FrameworkBenchmarks/blob/master/config/create.sql#L48
+  final static SAMPLE_FORTUNES = [
+    'fortune: No such file or directory',
+    "A computer scientist is someone who fixes things that aren''t broken.",
+    'After enough decimal places, nobody gives a damn.',
+    'A bad random number generator: 1, 1, 1, 1, 1, 4.33e+67, 1, 1, 1',
+    'A computer program does what you tell it to do, not what you want it to do.',
+    'Emacs is a nice operating system, but I prefer UNIX. — Tom Christaensen',
+    'Any program that runs right is obsolete.',
+    'A list is only as strong as its weakest link. — Donald Knuth',
+    'Feature: A bug with seniority.',
+    'Computers make very fast, very accurate mistakes.',
+    '<script>alert("This should not be displayed in a browser alert box.");</script>',
+    'フレームワークのベンチマーク'
+  ]
 
   @Shared RemoteControl remote = new RemoteControl(aut)
 
@@ -21,24 +39,38 @@ class TechempowerBenchmarkSpec extends ratpack.benchmarks.techempower.test.Teche
       'other.remoteControl.enabled': 'true',
       'other.hikari.dataSourceClassName': 'org.h2.jdbcx.JdbcDataSource',
       'other.hikari.dataSourceProperties.URL': 'jdbc:h2:mem:dev'
+//      'other.hikari.dataSourceClassName': 'com.mysql.jdbc.jdbc2.optional.MysqlDataSource',
+//      'other.hikari.dataSourceProperties.url': 'jdbc:mysql://localhost:3306/hello_world',
+//      'other.hikari.dataSourceProperties.user': 'benchmarkdbuser',
+//      'other.hikari.dataSourceProperties.password': 'benchmarkdbpass',
     )
   }
 
   def setupSpec() {
     remote.exec {
       Sql sql = get(Sql)
+
+      // Setup World table
       sql.executeInsert("create table if not exists World (id int primary key auto_increment, randomNumber int)")
       sql.withBatch(5000) { stmt ->
         DB_ROWS.times {
           stmt.addBatch("insert into World (randomNumber) values (${World.randomId()})")
         }
       }
+
+      // Setup Fortune table
+      sql.executeInsert("create table if not exists Fortune (id int primary key auto_increment, message varchar(2048))")
+      SAMPLE_FORTUNES.each {
+        sql.executeInsert("insert into Fortune (message) values ($it)")
+      }
     }
   }
 
   def cleanupSpec() {
     remote.exec {
-      get(Sql).execute("drop table World")
+      Sql sql = get(Sql)
+      sql.execute("drop table World")
+      sql.execute("drop table Fortune")
     }
   }
 
@@ -90,6 +122,20 @@ class TechempowerBenchmarkSpec extends ratpack.benchmarks.techempower.test.Teche
     assert randomNumbers == worlds.values().toList()
   }
 
+  // Could perhaps have used a Geb Spec instead but seemed a bit overkill
+  void assertFortunesResponseBody(String responseBody) {
+    def html = new XmlSlurper(false, false, true).parseText(responseBody)
+    def tableDataRows = html.body.table.tr.findAll{ !it.td.isEmpty() }
+    SAMPLE_FORTUNES << ADDITIONAL_FORTUNE
+    assert tableDataRows.size() == SAMPLE_FORTUNES.size()
+    SAMPLE_FORTUNES.sort().eachWithIndex { fortune, i ->
+      assert tableDataRows[i].td[1].text() == fortune
+      // Escaping needs to be tested separately on the original
+      // responseBody since XmlSlurper unescapes the parsed text
+      assert responseBody.contains(htmlEscaper().escape(fortune))
+    }
+  }
+
   def "single query test type fulfils requirements"() {
     when:
     get("db")
@@ -136,4 +182,15 @@ class TechempowerBenchmarkSpec extends ratpack.benchmarks.techempower.test.Teche
     worldCount = worldCountForQueriesMap.get(queries)
     queryString = getQueriesQueryString(queries)
   }
+
+  def "fortunes test type fulfils requirements"() {
+    when:
+    get("fortunes")
+
+    then:
+    def responseBody = response.asString()
+    assertFortunesResponseBody(responseBody)
+    assertResponseHeaders(response, 'text/html;charset=UTF-8', responseBody)
+  }
+
 }

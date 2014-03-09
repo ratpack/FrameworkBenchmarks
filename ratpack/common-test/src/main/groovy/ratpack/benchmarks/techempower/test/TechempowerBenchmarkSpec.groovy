@@ -1,6 +1,5 @@
 package ratpack.benchmarks.techempower.test
 
-import com.jayway.restassured.builder.ResponseBuilder
 import com.jayway.restassured.response.Response
 import io.netty.handler.codec.http.HttpHeaders
 import ratpack.groovy.test.TestHttpClient
