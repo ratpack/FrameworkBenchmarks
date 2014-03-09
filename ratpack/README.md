@@ -2,11 +2,11 @@
 
 This is the Ratpack portion of a [benchmarking test suite](../) comparing a variety of web development platforms.
 
-Ratpack apps can be written in either Groovy or Java. This project contains benchmarks written in both, under 
-the [ratpack-groovy](ratpack-groovy) and [ratpack-java](ratpack-java) directories respectively. 
+Ratpack apps can be written in either Groovy or Java. This project includes benchmarks written in both languages,
+under the [ratpack-groovy](ratpack-groovy) and [ratpack-java](ratpack-java) directories respectively.
 
 The `ratpack-groovy` module focuses mostly on developer productivity utilizing Ratpack's idiomatic Groovy DSL, rather 
-than trying to squeeze every last bit of performance out of it by using straight Java or other performance-tuning 
+than trying to squeeze every last bit of performance out of it by using pure Java or other performance-tuning
 techniques. `ratpack-java` on the other hand, focuses on raw performance using Java top to bottom and taking advantage 
 of low-level optimizations where possible.
 
@@ -27,6 +27,10 @@ for further details). More will follow soon, along with the implementation of th
 
 * [Groovy Multiple DB Queries test source](ratpack-groovy/src/ratpack/Ratpack.groovy)
 
+### Fortunes Test
+
+* [Groovy Fortunes test source](ratpack-groovy/src/ratpack/Ratpack.groovy)
+
 ### Database Updates Test
 
 * [Groovy DB Updates test source](ratpack-groovy/src/ratpack/Ratpack.groovy)
@@ -38,11 +42,11 @@ for further details). More will follow soon, along with the implementation of th
 
 ## Infrastructure Software Versions
 The tests were run with:
-* [Ratpack 0.9.2-SNAPSHOT](http://ratpack.io)
+* [Ratpack 0.9.3-SNAPSHOT](http://ratpack.io)
 * [Groovy 2.2.1](http://groovy.codehaus.org)
-* [Netty 4.0.15.FINAL](http://netty.io)
+* [Netty 4.0.17.FINAL](http://netty.io)
 * [Jackson 2.3.1](https://github.com/FasterXML/jackson)
-* [HikariCP 1.2.8](https://github.com/brettwooldridge/HikariCP)
+* [HikariCP 1.3.0](https://github.com/brettwooldridge/HikariCP)
 * [MySQL Connector/J 5.1.28](http://dev.mysql.com/downloads/connector/j/)
 
 ## Test URLs
@@ -58,6 +62,10 @@ http://localhost:5050/db
 
 http://localhost:5050/queries
 
+### Fortunes Test
+
+http://localhost:5050/fortunes
+
 ### Database Updates Test
 
 http://localhost:5050/updates
@@ -69,5 +77,5 @@ http://localhost:5050/plaintext
 ##TODO
 * Implement Java version of "Single database query" test type
 * Implement Java version of "Multiple database queries" test type
-* Implement "Fortunes" test type
+* Implement Java version of "Fortunes" test type
 * Implement Java version of "Database updates" test type

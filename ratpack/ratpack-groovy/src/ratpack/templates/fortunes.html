@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+<head><title>Fortunes</title></head>
+<body>
+<table>
+  <tr><th>id</th><th>message</th></tr><% model.fortunes.each { ratpack.benchmarks.techempower.common.Fortune fortune -> %>
+  <tr><td>${fortune.id}</td><td>${com.google.common.html.HtmlEscapers.htmlEscaper().escape(fortune.message)}</td></tr><% } %>
+</table>
+</body>
+</html>

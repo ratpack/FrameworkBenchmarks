@@ -1,12 +1,15 @@
 import io.netty.handler.codec.http.HttpHeaders
 import ratpack.benchmarks.techempower.groovy.DataAccessModule
+import ratpack.benchmarks.techempower.groovy.FortuneService
 import ratpack.benchmarks.techempower.groovy.QueryCountAcceptingBackgroundHandler
 import ratpack.benchmarks.techempower.groovy.WorldService
+import ratpack.groovy.templating.TemplatingModule
 import ratpack.hikari.HikariModule
 import ratpack.jackson.JacksonModule
 import ratpack.remote.RemoteControlModule
 
 import static ratpack.benchmarks.techempower.common.ResponseData.*
+import static ratpack.groovy.Groovy.groovyTemplate
 import static ratpack.groovy.Groovy.ratpack
 import static ratpack.jackson.Jackson.json
 
@@ -18,6 +21,8 @@ ratpack {
     register new DataAccessModule()
     register new RemoteControlModule()
     bind(WorldService)
+    bind(FortuneService)
+    get(TemplatingModule).staticallyCompile = true
   }
 
   handlers {
@@ -33,9 +38,9 @@ ratpack {
     }
 
     // Test type 2: Single database query
-    get("db") { WorldService ws ->
+    get("db") { WorldService worldService ->
       background {
-        ws.findByRandomId()
+        worldService.findByRandomId()
       } then {
         render json(it)
       }
@@ -45,6 +50,15 @@ ratpack {
     get("queries", new QueryCountAcceptingBackgroundHandler({ WorldService worldService, int queryCount ->
       worldService.findByRandomIdMulti(queryCount)
     }))
+
+    // Test type 4: Fortunes
+    get("fortunes") { FortuneService fortuneService ->
+      background {
+        fortuneService.allPlusOne()
+      } then {
+        render groovyTemplate("fortunes.html", fortunes: it)
+      }
+    }
 
     // Test type 5: Database updates
     get("updates",new QueryCountAcceptingBackgroundHandler({ WorldService worldService, int queryCount ->
