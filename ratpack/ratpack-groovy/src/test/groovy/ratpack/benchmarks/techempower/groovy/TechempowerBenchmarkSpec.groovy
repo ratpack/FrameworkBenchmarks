@@ -39,10 +39,6 @@ class TechempowerBenchmarkSpec extends ratpack.benchmarks.techempower.test.Teche
       'other.remoteControl.enabled': 'true',
       'other.hikari.dataSourceClassName': 'org.h2.jdbcx.JdbcDataSource',
       'other.hikari.dataSourceProperties.URL': 'jdbc:h2:mem:dev'
-//      'other.hikari.dataSourceClassName': 'com.mysql.jdbc.jdbc2.optional.MysqlDataSource',
-//      'other.hikari.dataSourceProperties.url': 'jdbc:mysql://localhost:3306/hello_world',
-//      'other.hikari.dataSourceProperties.user': 'benchmarkdbuser',
-//      'other.hikari.dataSourceProperties.password': 'benchmarkdbpass',
     )
   }
 
