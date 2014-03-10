@@ -18,11 +18,8 @@ class FortuneService {
   }
 
   List<Fortune> allPlusOne() {
-    List<Fortune> fortunes
-    sql.cacheStatements {
-      fortunes = sql.rows("select * from Fortune").collect { GroovyRowResult result ->
-        new Fortune(result.id, result.message)
-      }
+    List<Fortune> fortunes = sql.rows("select * from Fortune").collect { GroovyRowResult result ->
+      new Fortune(result.id, result.message)
     }
     fortunes.add(new Fortune(0, ADDITIONAL_FORTUNE))
     Collections.sort(fortunes)
