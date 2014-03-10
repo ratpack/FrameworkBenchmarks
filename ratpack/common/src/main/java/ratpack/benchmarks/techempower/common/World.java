@@ -21,6 +21,10 @@ public class World {
     return randomNumber;
   }
 
+  public void setRandomNumber(int randomNumber) {
+    this.randomNumber = randomNumber;
+  }
+
   public static int randomId() {
     // World ids range from 1 to 10000
     return 1 + ThreadLocalRandom.current().nextInt(DB_ROWS);

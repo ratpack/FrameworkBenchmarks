@@ -1,11 +1,13 @@
 package ratpack.benchmarks.techempower.groovy
 
+import groovy.transform.CompileStatic
 import ratpack.benchmarks.techempower.common.World
 import ratpack.handling.Context
 import ratpack.handling.Handler
 
 import static ratpack.jackson.Jackson.json
 
+@CompileStatic
 class QueryCountAcceptingBackgroundHandler implements Handler {
 
   QueryCountToWorldTransformer transformer

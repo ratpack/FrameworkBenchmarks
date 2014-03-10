@@ -1,10 +1,13 @@
 package ratpack.benchmarks.techempower.groovy
 
+import groovy.sql.BatchingStatementWrapper
 import groovy.sql.Sql
+import groovy.transform.CompileStatic
 import ratpack.benchmarks.techempower.common.World
 
 import javax.inject.Inject
 
+@CompileStatic
 class WorldService {
 
   final Sql sql
@@ -47,13 +50,13 @@ class WorldService {
 
   World find(int id) {
     def row = sql.firstRow("select * from World where id = $id")
-    row ? new World(id, row.randomNumber) : null
+    row ? new World((int)id, (int)row.randomNumber) : null
   }
 
   void batchUpdate(World[] worlds) {
-    sql.withBatch { stmt ->
-      worlds.each {
-        stmt.addBatch("update World set randomNumber = $it.randomNumber where id = $it.id")
+    sql.withBatch { BatchingStatementWrapper statement ->
+      worlds.each { World world ->
+        statement.addBatch("update World set randomNumber = $world.randomNumber where id = $world.id")
       }
     }
   }
