@@ -8,10 +8,10 @@ import static ratpack.jackson.Jackson.json
 
 class QueryCountAcceptingBackgroundHandler implements Handler {
 
-  Closure<World[]> inBackground
+  QueryCountToWorldTransformer transformer
 
-  QueryCountAcceptingBackgroundHandler(Closure<World[]> inBackground) {
-    this.inBackground = inBackground
+  QueryCountAcceptingBackgroundHandler(QueryCountToWorldTransformer transformer) {
+    this.transformer = transformer
   }
 
   private int queryCount(String queriesParam) {
@@ -34,7 +34,7 @@ class QueryCountAcceptingBackgroundHandler implements Handler {
   void handle(Context context) throws Exception {
     def worldService = context.get(WorldService)
     context.background {
-      inBackground(worldService, queryCount(context.request.queryParams.queries))
+      transformer.transform(worldService, queryCount(context.request.queryParams.queries))
     } then { World[] worlds->
       context.render(json(worlds))
     }
