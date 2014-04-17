@@ -42,9 +42,9 @@ for further details). More will follow soon, along with the implementation of th
 
 ## Infrastructure Software Versions
 The tests were run with:
-* [Ratpack 0.9.3-SNAPSHOT](http://ratpack.io)
+* [Ratpack 0.9.4-SNAPSHOT](http://ratpack.io)
 * [Groovy 2.2.1](http://groovy.codehaus.org)
-* [Netty 4.0.17.FINAL](http://netty.io)
+* [Netty 4.0.18.FINAL](http://netty.io)
 * [Jackson 2.3.1](https://github.com/FasterXML/jackson)
 * [HikariCP 1.3.0](https://github.com/brettwooldridge/HikariCP)
 * [MySQL Connector/J 5.1.28](http://dev.mysql.com/downloads/connector/j/)

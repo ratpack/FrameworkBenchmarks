@@ -23,6 +23,7 @@ ratpack {
     bind(WorldService)
     bind(FortuneService)
     get(TemplatingModule).staticallyCompile = true
+    get(JacksonModule).noPrettyPrint()
   }
 
   handlers {
@@ -39,7 +40,7 @@ ratpack {
 
     // Test type 2: Single database query
     get("db") { WorldService worldService ->
-      background {
+      blocking {
         worldService.findByRandomId()
       } then {
         render json(it)
@@ -53,7 +54,7 @@ ratpack {
 
     // Test type 4: Fortunes
     get("fortunes") { FortuneService fortuneService ->
-      background {
+      blocking {
         fortuneService.allPlusOne()
       } then {
         render groovyTemplate("fortunes.html", fortunes: it)

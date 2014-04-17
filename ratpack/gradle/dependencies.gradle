@@ -1,6 +1,6 @@
 ext {
   versions = [
-    ratpack: '0.9.3-SNAPSHOT'
+    ratpack: '0.9.4-SNAPSHOT'
   ]
 
   libraries = [

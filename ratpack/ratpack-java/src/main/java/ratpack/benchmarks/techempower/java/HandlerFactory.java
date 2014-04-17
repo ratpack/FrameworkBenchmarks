@@ -22,7 +22,7 @@ public class HandlerFactory implements ratpack.launch.HandlerFactory {
   private CharSequence date = HttpHeaders.newEntity(format.format(new Date()));
 
   public Handler create(LaunchConfig launchConfig) throws Exception {
-    launchConfig.getForeground().getExecutor().scheduleWithFixedDelay(new Runnable() {
+    launchConfig.getExecController().getExecutor().scheduleWithFixedDelay(new Runnable() {
       @Override
       public void run() {
         date = HttpHeaders.newEntity(format.format(new Date()));

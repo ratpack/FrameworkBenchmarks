@@ -35,7 +35,7 @@ class QueryCountAcceptingBackgroundHandler implements Handler {
   @Override
   void handle(Context context) throws Exception {
     def worldService = context.get(WorldService)
-    context.background {
+    context.blocking {
       transformer.transform(worldService, queryCount(context.request.queryParams.queries))
     } then { World[] worlds->
       context.render(json(worlds))
