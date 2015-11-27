@@ -1,0 +1,7 @@
+apply plugin: 'java'
+
+dependencies {
+    compile ratpack.dependency("groovy"),
+    ratpack.dependency("remote"),
+    ratpack.dependency("hikari")
+}

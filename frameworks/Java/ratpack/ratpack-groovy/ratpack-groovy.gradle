@@ -1,0 +1,3 @@
+apply plugin: "io.ratpack.ratpack-groovy"
+
+mainClassName='ratpack.benchmarks.techempower.groovy.Application'

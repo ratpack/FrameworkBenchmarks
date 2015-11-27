@@ -1,0 +1,64 @@
+import io.ratpack.gradle.RunInBackground
+
+apply from: "gradle/idea/idea.gradle"
+
+buildscript {
+  repositories {
+    maven { url "http://oss.jfrog.org/artifactory/repo" }
+    jcenter()
+  }
+  dependencies {
+    classpath 'io.ratpack:ratpack-gradle:1.1.1'
+  }
+}
+
+allprojects {
+  apply plugin: 'idea'
+
+  apply from: rootProject.file("gradle/dependencies.gradle")
+}
+
+subprojects {
+  apply plugin: "io.ratpack.ratpack-java"
+
+  repositories {
+    jcenter()
+    maven { url "http://oss.jfrog.org/artifactory/repo" }
+    maven { url "http://repo.springsource.org/repo" }
+  }
+
+  configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+  }
+
+  if (name in ['ratpack-java', 'ratpack-groovy']) {
+    dependencies {
+      compile project(':common')
+
+      runtime 'mysql:mysql-connector-java:5.1.28'
+      runtime 'org.apache.logging.log4j:log4j-slf4j-impl:2.0.1'
+      runtime 'org.apache.logging.log4j:log4j-api:2.0.1'
+      runtime 'org.apache.logging.log4j:log4j-core:2.0.1'
+      runtime 'com.lmax:disruptor:3.3.0'
+
+      testCompile project(':common-test')
+      testRuntime "com.h2database:h2:1.3.174"
+    }
+
+    task runInBackground(type: RunInBackground) {
+      dependsOn installDist
+
+      directory installApp.outputs.files.singleFile
+      command "bin/${project.name}"
+      readyText 'Ratpack started'
+    }
+  }
+}
+
+if (project.hasProperty('databaseHost')) {
+  applicationDefaultJvmArgs = ["-Dratpack.hikari.datasourceProperties.url=jdbc:mysql://${project.databaseHost}:3306/hello_world?jdbcCompliantTruncation=false&elideSetAutoCommits=true&useLocalSessionState=true&cachePrepStmts=true&cacheCallableStmts=true&alwaysSendSetIsolation=false&prepStmtCacheSize=4096&cacheServerConfiguration=true&prepStmtCacheSqlLimit=2048&zeroDateTimeBehavior=convertToNull&traceProtocol=false&useUnbufferedInput=false&useReadAheadInput=false&maintainTimeStats=false&useServerPrepStmts&cacheRSMetadata=true"]
+}
+
+dependencies {
+
+}

@@ -1,0 +1,51 @@
+{
+  "framework": "ratpack",
+  "tests": [{
+    "groovy": {
+      "setup_file": "setup_groovy",
+      "json_url": "/json",
+      "db_url": "/db",
+      "query_url": "/queries?queries=",
+      "fortune_url": "/fortunes",
+      "update_url": "/updates?queries=",
+      "plaintext_url": "/plaintext",
+      "port": 5050,
+      "approach": "Realistic",
+      "classification": "Micro",
+      "database": "MySQL",
+      "framework": "ratpack",
+      "language": "Groovy",
+      "orm": "Raw",
+      "platform": "Netty",
+      "webserver": "None",
+      "os": "Linux",
+      "database_os": "Linux",
+      "display_name": "ratpack-groovy",
+      "notes": "",
+      "versus": "netty"
+    },
+    "default": {
+      "setup_file": "setup_java",
+      "json_url": "/json",
+      "db_url": "/db",
+      "query_url": "/queries?queries=",
+      "fortune_url": "/fortunes",
+      "update_url": "/updates?queries=",
+      "plaintext_url": "/plaintext",
+      "port": 5050,
+      "approach": "Realistic",
+      "classification": "Micro",
+      "database": "MySQL",
+      "framework": "ratpack",
+      "language": "Java",
+      "orm": "Raw",
+      "platform": "Netty",
+      "webserver": "None",
+      "os": "Linux",
+      "database_os": "Linux",
+      "display_name": "ratpack-java",
+      "notes": "",
+      "versus": "netty"
+    }
+  }]
+}

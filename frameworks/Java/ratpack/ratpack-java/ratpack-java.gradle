@@ -1,0 +1,6 @@
+apply plugin: 'groovy'
+
+mainClassName='ratpack.benchmarks.techempower.java.Application'
+dependencies {
+  compile 'org.jdbi:jdbi:2.55'
+}

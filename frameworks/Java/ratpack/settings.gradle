@@ -1,0 +1,12 @@
+include 'ratpack-groovy', 'ratpack-java', 'common-test', 'common'
+
+rootProject.name = 'ratpack'
+
+def setBuildFile(project) {
+  project.buildFileName = "${project.name}.gradle"
+  project.children.each {
+    setBuildFile(it)
+  }
+}
+
+setBuildFile(rootProject)

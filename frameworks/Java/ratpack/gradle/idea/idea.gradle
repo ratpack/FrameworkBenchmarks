@@ -1,0 +1,20 @@
+import com.sun.org.apache.xerces.internal.parsers.XMLParser
+
+// This only gets applied to the root project
+apply plugin: "idea"
+
+idea {
+  project {
+    jdkName "1.8"
+    languageLevel "1.8"
+    ipr {
+      withXml { provider ->
+        def node = provider.asNode()
+        def vcsMapping = node.component.find { it.'@name' == 'VcsDirectoryMappings' }?.mapping[0]
+        vcsMapping.@vcs = 'Git'
+        vcsMapping.@directory = '$PROJECT_DIR$/../../..'
+        node.append(new XmlParser().parse(file("gradle/idea/codeStyle.xml")))
+      }
+    }
+  }
+}

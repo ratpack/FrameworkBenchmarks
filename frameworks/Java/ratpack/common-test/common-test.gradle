@@ -1,0 +1,8 @@
+apply plugin: 'groovy'
+
+dependencies {
+  compile libraries.spock,
+    project(':common'),
+    ratpack.dependency("groovy-test"),
+    ratpack.dependency("remote-test")
+}
