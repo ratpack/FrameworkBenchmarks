@@ -30,7 +30,6 @@ class WorldService {
         worlds[i] = findByRandomId()
       }
     }
-    sql.close()
     return worlds
   }
 
@@ -44,13 +43,12 @@ class WorldService {
       }
       batchUpdate(worlds)
     }
-    sql.close()
     return worlds
   }
 
   World find(int id) {
     def row = sql.firstRow("select * from World where id = $id")
-    row ? new World((int)id, (int)row.randomNumber) : null
+    row ? new World((int) id, (int) row.randomNumber) : null
   }
 
   void batchUpdate(World[] worlds) {

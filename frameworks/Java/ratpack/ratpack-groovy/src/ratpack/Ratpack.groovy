@@ -2,12 +2,13 @@ import com.fasterxml.jackson.core.util.MinimalPrettyPrinter
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.zaxxer.hikari.HikariConfig
 import io.netty.handler.codec.http.HttpHeaderNames
+import io.netty.handler.codec.http.HttpHeaderValues
 import ratpack.benchmarks.techempower.groovy.DataAccessModule
 import ratpack.benchmarks.techempower.groovy.FortuneService
-import ratpack.benchmarks.techempower.groovy.QueryCountAcceptingBackgroundHandler
 import ratpack.benchmarks.techempower.groovy.WorldService
 import ratpack.exec.Blocking
 import ratpack.groovy.template.MarkupTemplateModule
+import ratpack.handling.Context
 import ratpack.hikari.HikariModule
 
 import java.time.ZonedDateTime
@@ -26,13 +27,14 @@ ratpack {
     require('/hikari', HikariConfig)
     require('/template', MarkupTemplateModule.Config)
   }
+
   bindings {
     module HikariModule
     module DataAccessModule
     module MarkupTemplateModule
-    bind(WorldService)
-    bind(FortuneService)
-    add new ObjectMapper().writer(new MinimalPrettyPrinter())
+    bind WorldService
+    bind FortuneService
+    bindInstance new ObjectMapper().writer(new MinimalPrettyPrinter())
   }
 
   handlers {
@@ -57,9 +59,9 @@ ratpack {
     }
 
     // Test type 3: Multiple database queries
-    get("queries", new QueryCountAcceptingBackgroundHandler({ WorldService worldService, int queryCount ->
-      worldService.findByRandomIdMulti(queryCount)
-    }))
+    get("queries") { WorldService worldService ->
+      render(json(worldService.findByRandomIdMulti(queriesParam(context))))
+    }
 
     // Test type 4: Fortunes
     get("fortunes") { FortuneService fortuneService ->
@@ -71,16 +73,28 @@ ratpack {
     }
 
     // Test type 5: Database updates
-    get("updates",new QueryCountAcceptingBackgroundHandler({ WorldService worldService, int queryCount ->
-      worldService.updateByRandomIdMulti(queryCount)
-    }))
+    get("updates") { WorldService worldService ->
+      render(json(worldService.updateByRandomIdMulti(queriesParam(context))))
+    }
 
     // Test type 6: Plaintext
     get("plaintext") {
-      // using response.send() directly, by-passing any render() overhead
-      response.headers.set(CONTENT_TYPE, TEXT_PLAIN)
-      response.send MESSAGE_VALUE
+      response.contentType(HttpHeaderValues.TEXT_PLAIN).send(MESSAGE_VALUE)
     }
   }
 
+}
+
+static int queriesParam(Context ctx) {
+  def param = ctx.request.queryParams.queries
+  if (param) {
+    try {
+      int count = Integer.parseInt(param)
+      Math.max(Math.min(count, 500), 1)
+    } catch (NumberFormatException ignore) {
+      1
+    }
+  } else {
+    1
+  }
 }

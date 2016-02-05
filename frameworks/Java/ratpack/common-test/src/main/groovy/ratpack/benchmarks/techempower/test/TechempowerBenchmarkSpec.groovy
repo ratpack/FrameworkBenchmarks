@@ -40,36 +40,37 @@ abstract class TechempowerBenchmarkSpec extends Specification {
 
   // See https://github.com/TechEmpower/FrameworkBenchmarks/blob/master/config/create.sql#L48
   final static SAMPLE_FORTUNES = [
-    'fortune: No such file or directory',
-    "A computer scientist is someone who fixes things that aren''t broken.",
-    'After enough decimal places, nobody gives a damn.',
-    'A bad random number generator: 1, 1, 1, 1, 1, 4.33e+67, 1, 1, 1',
-    'A computer program does what you tell it to do, not what you want it to do.',
-    'Emacs is a nice operating system, but I prefer UNIX. — Tom Christaensen',
-    'Any program that runs right is obsolete.',
-    'A list is only as strong as its weakest link. — Donald Knuth',
-    'Feature: A bug with seniority.',
-    'Computers make very fast, very accurate mistakes.',
-    '<script>alert("This should not be displayed in a browser alert box.");</script>',
-    'フレームワークのベンチマーク'
+      'fortune: No such file or directory',
+      "A computer scientist is someone who fixes things that aren''t broken.",
+      'After enough decimal places, nobody gives a damn.',
+      'A bad random number generator: 1, 1, 1, 1, 1, 4.33e+67, 1, 1, 1',
+      'A computer program does what you tell it to do, not what you want it to do.',
+      'Emacs is a nice operating system, but I prefer UNIX. — Tom Christaensen',
+      'Any program that runs right is obsolete.',
+      'A list is only as strong as its weakest link. — Donald Knuth',
+      'Feature: A bug with seniority.',
+      'Computers make very fast, very accurate mistakes.',
+      '<script>alert("This should not be displayed in a browser alert box.");</script>',
+      'フレームワークのベンチマーク'
   ]
 
   def setupSpec() {
     remote.exec {
       Sql sql = new Sql(get(DataSource))
-
-      // Setup World table
-      sql.executeInsert("create table if not exists World (id int primary key auto_increment, randomNumber int)")
-      sql.withBatch(5000) { stmt ->
-        DB_ROWS.times {
-          stmt.addBatch("insert into World (randomNumber) values (${World.randomId()})")
+      sql.cacheConnection {
+        // Setup World table
+        sql.executeInsert("create table if not exists World (id int primary key auto_increment, randomNumber int)")
+        sql.withBatch(5000) { stmt ->
+          DB_ROWS.times {
+            stmt.addBatch("insert into World (randomNumber) values (${World.randomId()})")
+          }
         }
-      }
 
-      // Setup Fortune table
-      sql.executeInsert("create table if not exists Fortune (id int primary key auto_increment, message varchar(2048))")
-      SAMPLE_FORTUNES.each {
-        sql.executeInsert("insert into Fortune (message) values ($it)")
+        // Setup Fortune table
+        sql.executeInsert("create table if not exists Fortune (id int primary key auto_increment, message varchar(2048))")
+        TechempowerBenchmarkSpec.SAMPLE_FORTUNES.each {
+          sql.executeInsert("insert into Fortune (message) values ($it)")
+        }
       }
     }
   }
@@ -166,7 +167,7 @@ abstract class TechempowerBenchmarkSpec extends Specification {
 
   void assertFortunesResponseBody(String responseBody) {
     def html = new XmlSlurper(false, false, true).parseText(responseBody)
-    def tableDataRows = html.body.table.tr.findAll{ !it.td.isEmpty() }
+    def tableDataRows = html.body.table.tr.findAll { !it.td.isEmpty() }
     SAMPLE_FORTUNES << ADDITIONAL_FORTUNE
     assert tableDataRows.size() == SAMPLE_FORTUNES.size()
     SAMPLE_FORTUNES.sort().eachWithIndex { fortune, i ->
@@ -176,24 +177,25 @@ abstract class TechempowerBenchmarkSpec extends Specification {
       assert responseBody.contains(htmlEscaper().escape(fortune))
     }
   }
+
   String getQueriesQueryString(queries) {
     return queries == null ? '' : "?queries=$queries"
   }
 
   Map getWorldCountForQueriesMap() {
     return [
-      null  : 1,
-      ''    : 1,
-      'foo' : 1,
-      0     : 1,
-      (-1)  : 1,
-      500   : 500,
-      501   : 500,
-      1     : 1,
-      5     : 5,
-      10    : 10,
-      15    : 15,
-      20    : 20
+        null : 1,
+        ''   : 1,
+        'foo': 1,
+        0    : 1,
+        (-1) : 1,
+        500  : 500,
+        501  : 500,
+        1    : 1,
+        5    : 5,
+        10   : 10,
+        15   : 15,
+        20   : 20
     ]
   }
 
