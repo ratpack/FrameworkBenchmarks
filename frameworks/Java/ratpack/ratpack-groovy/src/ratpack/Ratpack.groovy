@@ -7,14 +7,14 @@ import ratpack.benchmarks.techempower.groovy.FortuneService
 import ratpack.benchmarks.techempower.groovy.QueryCountAcceptingBackgroundHandler
 import ratpack.benchmarks.techempower.groovy.WorldService
 import ratpack.exec.Blocking
-import ratpack.groovy.template.TextTemplateModule
+import ratpack.groovy.template.MarkupTemplateModule
 import ratpack.hikari.HikariModule
 
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 import static ratpack.benchmarks.techempower.common.ResponseData.*
-import static ratpack.groovy.Groovy.groovyTemplate
+import static ratpack.groovy.Groovy.groovyMarkupTemplate
 import static ratpack.groovy.Groovy.ratpack
 import static ratpack.jackson.Jackson.json
 
@@ -24,12 +24,12 @@ ratpack {
     props('ratpack.properties')
     sysProps()
     require('/hikari', HikariConfig)
-    require('/template', TextTemplateModule.Config)
+    require('/template', MarkupTemplateModule.Config)
   }
   bindings {
     module HikariModule
     module DataAccessModule
-    module TextTemplateModule
+    module MarkupTemplateModule
     bind(WorldService)
     bind(FortuneService)
     add new ObjectMapper().writer(new MinimalPrettyPrinter())
@@ -66,7 +66,7 @@ ratpack {
       Blocking.get {
         fortuneService.allPlusOne()
       } then {
-        render groovyTemplate("fortunes.html", fortunes: it)
+        render groovyMarkupTemplate(fortunes: it, "fortunes.gtpl")
       }
     }
 
