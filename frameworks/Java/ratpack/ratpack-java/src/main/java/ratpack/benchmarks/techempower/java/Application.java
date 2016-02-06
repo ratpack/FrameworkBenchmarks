@@ -59,7 +59,7 @@ public class Application {
           // Test type 3: Multiple database queries
           .get("queries", ctx -> ctx.get(WorldService.class).findByRandomIdMulti(getQueryCount(ctx)).then(worlds -> ctx.render(Jackson.json(worlds))))
           // Test type 4: Fortunes
-          .get("fortunes", ctx -> ctx.get(FortuneService.class).allPlusOne().then(fortunes -> ctx.render(Groovy.groovyTemplate(ImmutableMap.of("fortunes", fortunes), "fortunes.html"))))
+          .get("fortunes", ctx -> ctx.get(FortuneService.class).allPlusOne().then(fortunes -> ctx.render(Groovy.groovyTemplate(ImmutableMap.of("fortunes", fortunes), "fortunes.html", "text/html;charset=UTF-8"))))
           // Test type 5: Database updates
           .get("updates", ctx -> ctx.get(WorldService.class).updateByRandomIdMulti(getQueryCount(ctx)).then(worlds -> ctx.render(Jackson.json(worlds))))
           // Test type 6: Plaintext
