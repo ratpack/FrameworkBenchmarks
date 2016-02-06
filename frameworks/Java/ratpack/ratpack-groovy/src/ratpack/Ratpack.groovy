@@ -68,7 +68,7 @@ ratpack {
       Blocking.get {
         fortuneService.allPlusOne()
       } then {
-        render groovyMarkupTemplate(fortunes: it, "fortunes.gtpl")
+        render groovyMarkupTemplate(fortunes: it, "fortunes.gtpl", "text/html;charset=UTF-8")
       }
     }
 
