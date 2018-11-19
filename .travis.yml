@@ -72,6 +72,7 @@ env:
     - "TESTDIR=Java/play1"
     - "TESTDIR=Java/play1siena"
     - "TESTDIR=Java/play2-java"
+    - "TESTDIR=Java/ratpack"
     - "TESTDIR=Java/restexpress"
     - "TESTDIR=Java/servlet"
     - "TESTDIR=Java/servlet3-cass"
