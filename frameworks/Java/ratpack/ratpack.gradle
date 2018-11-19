@@ -7,7 +7,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'io.ratpack:ratpack-gradle:1.1.1'
+    classpath 'io.ratpack:ratpack-gradle:1.6.0-rc-1'
   }
 }
 
@@ -43,7 +43,7 @@ subprojects {
     task runInBackground(type: RunInBackground) {
       dependsOn installDist
 
-      directory installApp.outputs.files.singleFile
+      directory installDist.outputs.files.singleFile
       command "bin/${project.name}"
       readyText 'Ratpack started'
     }
