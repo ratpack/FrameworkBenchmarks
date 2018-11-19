@@ -79,3 +79,4 @@ http://localhost:5050/plaintext
 * Implement Java version of "Multiple database queries" test type
 * Implement Java version of "Fortunes" test type
 * Implement Java version of "Database updates" test type
+
